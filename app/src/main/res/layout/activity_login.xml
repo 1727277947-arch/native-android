@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg" android:fillViewport="true" android:isScrollContainer="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:gravity="center_horizontal"
+        android:paddingStart="28dp" android:paddingEnd="28dp" android:paddingTop="80dp" android:paddingBottom="40dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="📡 新闻雷达" android:textColor="@color/text_primary"
+            android:textSize="30sp" android:textStyle="bold" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" android:text="请输入访问密码进入"
+            android:textColor="@color/text_secondary" android:textSize="13sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pass_layout" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="36dp"
+            android:hint="访问密码" app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/border"
+            app:boxCornerRadiusTopStart="14dp" app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp" app:boxCornerRadiusBottomEnd="14dp"
+            app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_pass" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="textPassword"
+                android:textColor="@color/text_primary" android:textSize="15sp"
+                android:hint="请输入访问密码" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button android:id="@+id/login_btn" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="28dp"
+            android:text="进入" android:textSize="16sp" android:minHeight="52dp" />
+        <TextView android:id="@+id/login_error" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="14dp"
+            android:textColor="@color/red" android:textSize="13sp" android:gravity="center"
+            android:minHeight="22dp" />
+    </LinearLayout>
+</ScrollView>

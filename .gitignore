@@ -1,0 +1,18 @@
+﻿# build & ide
+build/
+.gradle/
+*.log
+local.properties
+.idea/
+*.iml
+captures/
+
+# secrets / keys (do not track)
+keystore.properties
+*.jks
+*.keystore
+
+# misc
+_verify/
+
+*.apk

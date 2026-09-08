@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_policy" android:icon="@drawable/ic_home" android:title="新闻政策" />
+    <item android:id="@+id/nav_prices" android:icon="@drawable/ic_chart" android:title="期货现货" />
+    <item android:id="@+id/nav_foreign" android:icon="@drawable/ic_globe" android:title="国外" />
+    <item android:id="@+id/nav_account" android:icon="@drawable/ic_account" android:title="我的" />
+</menu>

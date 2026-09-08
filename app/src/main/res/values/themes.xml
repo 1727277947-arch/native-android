@@ -1,0 +1,23 @@
+<resources>
+    <style name="Theme.NewsRadar" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorPrimaryContainer">@color/surface2</item>
+        <item name="colorOnPrimaryContainer">@color/text_primary</item>
+        <item name="colorSecondary">@color/accent_dark</item>
+        <item name="colorOnSecondary">#ffffff</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="bottomNavigationStyle">@style/Widget.Material3.BottomNavigationView</item>
+    </style>
+
+    <style name="NewsInputText" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/surface2</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+        <item name="boxStrokeColor">@color/border</item>
+    </style>
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+    <color name="bg">#f8f3ec</color>
+    <color name="surface">#ffffff</color>
+    <color name="surface2">#fff1f5</color>
+    <color name="border">#f3e4eb</color>
+    <color name="text_primary">#332a40</color>
+    <color name="text_secondary">#866f8b</color>
+    <color name="accent">#ff6f91</color>
+    <color name="accent_dark">#d94f76</color>
+    <color name="green">#2fb47c</color>
+    <color name="orange">#ffab3d</color>
+    <color name="red">#ff5a72</color>
+    <color name="btn_ic_bg">#f8f3ec</color>
+</resources>

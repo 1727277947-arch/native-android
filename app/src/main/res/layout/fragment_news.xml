@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/news_refresh"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg">
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical" android:background="@color/bg">
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_toolbar_gradient"
+            android:paddingTop="6dp" android:paddingBottom="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingStart="16dp" android:paddingEnd="16dp" android:paddingTop="8dp">
+                <TextView android:id="@+id/news_title" android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="热点资讯" android:textColor="@color/text_primary"
+                    android:textSize="24sp" android:textStyle="bold" />
+                <TextView android:id="@+id/news_refresh_btn" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="↻ 刷新" android:textColor="#ffffff"
+                    android:textSize="13sp" android:paddingStart="14dp" android:paddingEnd="14dp"
+                    android:paddingTop="7dp" android:paddingBottom="7dp"
+                    android:background="@drawable/bg_tag_selected" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp" android:orientation="horizontal"
+                android:gravity="center_vertical" android:background="@drawable/bg_card"
+                android:paddingStart="12dp" android:paddingEnd="8dp" android:paddingVertical="2dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🔍" android:textSize="15sp" android:textColor="@color/text_secondary"
+                    android:paddingEnd="8dp" android:gravity="center_vertical"/>
+                <EditText android:id="@+id/search_input" android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:inputType="text" android:background="@null"
+                    android:singleLine="true" android:textColor="@color/text_primary" android:textSize="14sp"
+                    android:hint="搜索标题 / 摘要 / 来源" android:textColorHint="@color/text_secondary"
+                    android:paddingVertical="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" android:scrollbars="none" android:clipToPadding="false">
+            <LinearLayout android:id="@+id/filter_row" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:orientation="horizontal"
+                android:paddingStart="16dp" android:paddingEnd="16dp" />
+        </HorizontalScrollView>
+        <LinearLayout android:id="@+id/price_panel" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:layout_marginStart="8dp" android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+            android:visibility="gone">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="今日现货/期货报价" android:textColor="@color/accent_dark"
+                android:textSize="13sp" android:textStyle="bold"
+                android:paddingStart="16dp" android:paddingEnd="16dp" android:paddingBottom="6dp" />
+            <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:scrollbars="none" android:clipToPadding="false" android:paddingStart="12dp" android:paddingEnd="12dp">
+                <LinearLayout android:id="@+id/price_row" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:orientation="horizontal" />
+            </HorizontalScrollView>
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/news_list"
+            android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+            android:paddingTop="8dp" android:paddingStart="4dp" android:paddingEnd="4dp"
+            android:paddingBottom="16dp" android:clipToPadding="false" android:scrollbars="none" />
+        <LinearLayout android:id="@+id/news_empty" android:layout_width="match_parent"
+            android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical"
+            android:visibility="gone" />
+    </LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
