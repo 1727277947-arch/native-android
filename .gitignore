@@ -16,3 +16,5 @@ keystore.properties
 _verify/
 
 *.apk
+
+*.tmp
