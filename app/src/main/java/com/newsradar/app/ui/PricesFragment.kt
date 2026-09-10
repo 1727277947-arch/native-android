@@ -623,6 +623,44 @@ class PricesFragment : Fragment() {
             r2.text = "一手保证金≈" + boardNum(o.optDouble("est_margin", 0.0)) + "元  ·  十万内约 " + o.optInt("hands_in_100k", 0) + " 手"
             r2.setTextColor(0xFF6f6273.toInt()); r2.textSize = 11f; r2.setPadding(0, dp(1), 0, 0)
             card.addView(r2)
+
+            // 同品种多/空双方案（服务端 long_plan / short_plan，含 ATR 自适应止损，纯展示）
+            val lp2: Any? = o.opt("long_plan")
+            if (lp2 is JSONObject) {
+                val row = TextView(requireContext())
+                val slp = lp2.optDouble("sl_pct", 0.0)
+                row.text = "多单  进场 " + boardNum(lp2.optDouble("entry", 0.0)) +
+                        "  止损 " + boardNum(lp2.optDouble("sl", 0.0)) + "(-" + "%.2f".format(slp) + "%)" +
+                        "  止盈 " + boardNum(lp2.optDouble("tp", 0.0))
+                row.setTextColor(0xFFf85149.toInt()); row.textSize = 12f; row.setTypeface(null, Typeface.BOLD)
+                row.setPadding(0, dp(3), 0, 0)
+                card.addView(row)
+                val note = lp2.optString("note", "")
+                if (note.isNotEmpty()) {
+                    val n = TextView(requireContext())
+                    n.text = "  " + note
+                    n.setTextColor(0xFF6f6273.toInt()); n.textSize = 10f
+                    card.addView(n)
+                }
+            }
+            val sp2: Any? = o.opt("short_plan")
+            if (sp2 is JSONObject) {
+                val row = TextView(requireContext())
+                val slp = sp2.optDouble("sl_pct", 0.0)
+                row.text = "空单  进场 " + boardNum(sp2.optDouble("entry", 0.0)) +
+                        "  止损 " + boardNum(sp2.optDouble("sl", 0.0)) + "(+" + "%.2f".format(slp) + "%)" +
+                        "  止盈 " + boardNum(sp2.optDouble("tp", 0.0))
+                row.setTextColor(0xFF3fb950.toInt()); row.textSize = 12f; row.setTypeface(null, Typeface.BOLD)
+                row.setPadding(0, dp(3), 0, 0)
+                card.addView(row)
+                val note = sp2.optString("note", "")
+                if (note.isNotEmpty()) {
+                    val n = TextView(requireContext())
+                    n.text = "  " + note
+                    n.setTextColor(0xFF6f6273.toInt()); n.textSize = 10f
+                    card.addView(n)
+                }
+            }
         }
         if (!shown) {
             val none = TextView(requireContext())

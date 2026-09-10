@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 天空：柔和暖色，逐层渐变,营造清晨草地感 -->
+    <path android:pathData="M0,0 L108,0 L108,30 C86,34 66,30 46,32 C28,34 14,32 0,28 Z" android:fillColor="#FFFDF0F4"/>
+    <path android:pathData="M0,18 L108,18 L108,44 C88,48 68,44 48,46 C30,48 16,46 0,42 Z" android:fillColor="#FFFBE6EE"/>
+    <path android:pathData="M0,32 L108,32 L108,58 C90,62 70,58 50,60 C32,62 18,60 0,56 Z" android:fillColor="#FFF6DCE8"/>
+
+    <!-- 远坡：浅绿 -->
+    <path android:pathData="M0,58 C22,52 40,58 58,56 C76,54 92,50 108,53 L108,70 C90,66 74,72 54,74 C34,76 18,70 0,76 Z" android:fillColor="#FFB6E8C6"/>
+
+    <!-- 近坡：饱和度更高的草绿 -->
+    <path android:pathData="M0,74 C18,66 34,72 54,70 C74,68 90,62 108,66 L108,108 L0,108 Z" android:fillColor="#FF7FD3A0"/>
+
+    <!-- 云朵：柔和白圆 -->
+    <path android:pathData="M26,26 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" android:fillColor="#FFFFFFFF"/>
+    <path android:pathData="M35,23 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" android:fillColor="#FFFFFFFF"/>
+    <path android:pathData="M45,26 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" android:fillColor="#FFFFFFFF"/>
+
+    <!-- 奶牛身体：奶白 -->
+    <path
+        android:pathData="M40,62 C40,52 48,46 58,46 C68,46 76,52 76,62 C76,70 70,74 58,74 C46,74 40,70 40,62 Z"
+        android:fillColor="#FFFFFBF6"/>
+    <path
+        android:pathData="M50,52 C54,49 59,50 60,54 C61,58 57,61 53,60 C49,59 47,55 50,52 Z"
+        android:fillColor="#FF3C3346"/>
+    <path
+        android:pathData="M66,58 C70,56 74,58 73,63 C72,67 67,68 65,65 C63,62 63,59 66,58 Z"
+        android:fillColor="#FF3C3346"/>
+
+    <!-- 奶牛头 -->
+    <path
+        android:pathData="M30,52 C30,42 37,36 44,36 C51,36 58,42 58,52 C58,60 51,65 44,65 C37,65 30,60 30,52 Z"
+        android:fillColor="#FFFFFBF6"/>
+    <path android:pathData="M29,43 C25,38 26,34 30,34 C33,34 34,38 33,42 Z" android:fillColor="#FF3C3346"/>
+    <path android:pathData="M59,43 C63,38 62,34 58,34 C55,34 54,38 55,42 Z" android:fillColor="#FF3C3346"/>
+    <path
+        android:pathData="M38,40 C42,36 48,37 49,41 C50,45 44,47 41,45 C38,43 36,42 38,40 Z"
+        android:fillColor="#FF3C3346"/>
+
+    <!-- 眼睛 -->
+    <path android:pathData="M39,51 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" android:fillColor="#FF3C3346"/>
+    <path android:pathData="M50,51 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" android:fillColor="#FF3C3346"/>
+    <path android:pathData="M40,50 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" android:fillColor="#FFFFFFFF"/>
+    <path android:pathData="M51,50 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" android:fillColor="#FFFFFFFF"/>
+
+    <!-- 粉色口鼻：呼应 accent -->
+    <path
+        android:pathData="M39,58 C39,56 49,56 49,58 C49,62 44,64 44,64 C44,64 39,62 39,58 Z"
+        android:fillColor="#FFFFB3C6"/>
+    <path android:pathData="M42,59 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" android:fillColor="#FFD98CA6"/>
+    <path android:pathData="M46,59 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0" android:fillColor="#FFD98CA6"/>
+
+    <!-- 尾巴 -->
+    <path
+        android:pathData="M76,60 C81,60 82,65 79,68"
+        android:strokeColor="#FFFFFBF6" android:strokeWidth="2.6"
+        android:strokeLineCap="round"/>
+    <path android:pathData="M79,68 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" android:fillColor="#FF3C3346"/>
+
+    <!-- 草丛 -->
+    <path android:pathData="M18,78 C20,73 22,73 23,78 C24,74 27,74 27,78 Z" android:fillColor="#FF46A96F"/>
+    <path android:pathData="M86,76 C88,71 90,71 91,76 C92,72 95,72 95,76 Z" android:fillColor="#FF46A96F"/>
+    <path android:pathData="M92,84 C94,80 96,80 97,84 C98,81 100,81 100,84 Z" android:fillColor="#FF6FCB93"/>
+
+    <!-- 小野花 -->
+    <path android:pathData="M30,84 m-2.4,0 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" android:fillColor="#FFFFFBF6"/>
+    <path android:pathData="M30,84 m-1.1,0 a1.1,1.1 0 1,0 2.2,0 a1.1,1.1 0 1,0 -2.2,0" android:fillColor="#FFFFC24D"/>
+    <path android:pathData="M74,86 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" android:fillColor="#FFFFFBF6"/>
+    <path android:pathData="M74,86 m-0.9,0 a0.9,0.9 0 1,0 1.8,0 a0.9,0.9 0 1,0 -1.8,0" android:fillColor="#FFFFC24D"/>
+</vector>
