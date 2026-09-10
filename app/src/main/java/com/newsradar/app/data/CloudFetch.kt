@@ -19,8 +19,7 @@ object CloudFetch {
     private const val REPO = "newsradar-fetch"
     private const val WF = "fetch.yml"
 
-    // App 内置的 GitHub 令牌（仅用于触发本仓库的工作流）。注意：会随安装包分发，请妥善保管此仓库令牌。
-    private const val GH_TOKEN = "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"
+    // GitHub 令牌不写死在源码里：构建时由 keystore.properties 的 ghToken 注入 BuildConfig（该文件不入库）。
 
     private const val API = "https://api.github.com"
     private const val TMO = 8000
@@ -32,6 +31,9 @@ object CloudFetch {
 
     /** 触发云端抓取，并在后台线程里轮询，直到云端跑完或超时。调用方应放在后台线程。 */
     fun triggerAndWait(): FetchResult {
+        if (com.newsradar.app.BuildConfig.GH_TOKEN.isBlank()) {
+            return FetchResult(false, false, "未配置 GitHub 令牌：请在 keystore.properties 填写 ghToken 后重新构建")
+        }
         // 1) 记录当前最新一次 dispatch 的 created_at，作为判断"我这次触发的 run"的基准
         val baseline = latestDispatchCreated()
         // 2) 发通知触发抓取
@@ -115,7 +117,7 @@ object CloudFetch {
                 conn.connectTimeout = TMO
                 conn.readTimeout = TMO
                 conn.doOutput = true
-                conn.setRequestProperty("Authorization", "token $GH_TOKEN")
+                conn.setRequestProperty("Authorization", "token " + com.newsradar.app.BuildConfig.GH_TOKEN)
                 conn.setRequestProperty("Accept", "application/vnd.github+json")
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.setRequestProperty("User-Agent", "NewsRadar-Android/1.2")
@@ -134,7 +136,7 @@ object CloudFetch {
             conn.requestMethod = "GET"
             conn.connectTimeout = TMO
             conn.readTimeout = TMO
-            conn.setRequestProperty("Authorization", "token $GH_TOKEN")
+            conn.setRequestProperty("Authorization", "token " + com.newsradar.app.BuildConfig.GH_TOKEN)
             conn.setRequestProperty("Accept", "application/vnd.github+json")
             conn.setRequestProperty("User-Agent", "NewsRadar-Android/1.2")
             if (conn.responseCode != 200) return ""

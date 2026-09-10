@@ -27,6 +27,15 @@ android {
         targetSdk 34
         versionCode 41
         versionName '2.31'
+
+        // GitHub 令牌从 keystore.properties 读取（该文件不入库），避免明文写入源码
+        def _localProps = new Properties()
+        def _lp = new File(rootDir, 'keystore.properties')
+        if (_lp.exists()) {
+            _lp.withInputStream { _localProps.load(it) }
+        }
+        def _ghTok = _localProps['ghToken'] ?: ''
+        buildConfigField 'String', 'GH_TOKEN', '"' + _ghTok + '"'
     }
     buildTypes {
         debug {
@@ -38,6 +47,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        buildConfig true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
