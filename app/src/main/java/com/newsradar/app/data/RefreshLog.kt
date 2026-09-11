@@ -1,4 +1,4 @@
-package com.newsradar.app.data
+﻿package com.newsradar.app.data
 
 import android.content.Context
 import org.json.JSONArray
@@ -37,6 +37,10 @@ object RefreshLog {
         }
     }
 
+    /** 记一条纯文本事件（用于"自动补抓"这类非抓取动作），便于在"我的"页排查连不上问题。 */
+    fun add(ctx: Context, text: String) {
+        record(ctx, text, true, true, 0, 0, "")
+    }
     fun list(ctx: Context): JSONArray {
         return try {
             JSONArray(safe(ctx).getString(KEY, "[]"))

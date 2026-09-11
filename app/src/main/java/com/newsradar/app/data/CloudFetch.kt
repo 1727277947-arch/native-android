@@ -1,4 +1,4 @@
-package com.newsradar.app.data
+﻿package com.newsradar.app.data
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -22,7 +22,9 @@ object CloudFetch {
     // GitHub 令牌不写死在源码里：构建时由 keystore.properties 的 ghToken 注入 BuildConfig（该文件不入库）。
 
     private const val API = "https://api.github.com"
-    private const val TMO = 8000
+    // GitHub API 的往返在移动网络下常见 300~900ms，TLS 握手再叠一轮，原来 8s 的预算
+    // 在弱网/切网瞬间经常不够用，于是"通知云端失败：无法连接 GitHub"频发。放宽到 15s。
+    private const val TMO = 15000
     private const val POLL_MS = 8000L
     private const val MAX_WAIT_MS = 260000L   // 抓取约1~3分钟，最多等约4.3分钟
 
@@ -100,9 +102,9 @@ object CloudFetch {
 
     private fun dispatch(): Boolean {
         // 国内访问 GitHub 不稳定，多试几次
-        for (attempt in 1..3) {
+        for (attempt in 1..4) {
             if (dispatchOnce()) return true
-            try { Thread.sleep(2000L * attempt) } catch (_: Exception) {}
+            try { Thread.sleep(1500L * attempt) } catch (_: Exception) {}
         }
         return false
     }

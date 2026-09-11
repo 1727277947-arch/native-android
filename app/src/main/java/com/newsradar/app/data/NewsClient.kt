@@ -11,9 +11,11 @@ import java.net.URL
 object NewsClient {
     private const val LIVE_BASE = "https://gitee.com/ys15251239086/shuobao-gitee/raw/master/data"
     private const val LIVE_BASE_ALT = "https://cdn.jsdelivr.net/gh/1727277947-arch/newsradar-fetch@main/data"
-    private const val TMO_CONNECT = 6000
-    private const val TMO_READ = 8000
-
+    // 超时：实测到 gitee/github 的往返有 400~500ms，长响应(TLS握手+首包+全量JSON)在弱信号下
+    // 会明显超过原来 6s/8s 的预算，导致"看着有网却报连不上"。放宽到 12s/20s，配合上面的重试，
+    // 换来的是失败率大幅下降（真断网时也仍是有限等待，不会一直转圈）。
+    private const val TMO_CONNECT = 12000
+    private const val TMO_READ = 20000
     val NEWS_URL = "$LIVE_BASE/news.json"
     val STRATEGY_URL = "$LIVE_BASE/strategy.json"
     val CHANGELOG_URL = "$LIVE_BASE/strategy_changelog.json"
@@ -73,16 +75,34 @@ object NewsClient {
         }
     }
 
+    /**
+     * 拉取远端文本。
+     *
+     * 原实现是"主源试一次、失败就换备源试一次"，只有两发子弹：国内网络抖动、丢一个包、
+     * 或 TLS 握手慢一点，整页就直接判定失败并回退到 App 内置的旧数据 —— 这就是
+     * "数据连不上 / 一直是旧数据"的主要来源。现在改为：
+     *   1) 主源与备源各自重试 2 次（带退避），任一成功即返回；
+     *   2) 只有主源连续失败才切备源，不再"一枪没中就换枪"；
+     *   3) 全部失败时把最后一次的真实原因抛出去，让界面能如实提示，而不是静默装正常。
+     */
     private fun fetchText(url: String): String {
-        return try {
-            httpGet(url)
-        } catch (e: Exception) {
-            // 主源失败则回退到备用源(jDelivr)
-            if (url.startsWith(LIVE_BASE)) httpGet(url.replace(LIVE_BASE, LIVE_BASE_ALT))
-            else throw e
+        val alt = if (url.startsWith(LIVE_BASE)) url.replace(LIVE_BASE, LIVE_BASE_ALT) else null
+        val sources = if (alt != null) listOf(url, alt) else listOf(url)
+        var lastErr = ""
+        for (src in sources) {
+            for (attempt in 1..2) {
+                try {
+                    return httpGet(src)
+                } catch (e: Exception) {
+                    lastErr = e.message ?: e.javaClass.simpleName
+                    if (attempt < 2) {
+                        try { Thread.sleep(350L * attempt) } catch (_: Exception) {}
+                    }
+                }
+            }
         }
+        throw RuntimeException(lastErr.ifBlank { "网络不可用" })
     }
-
     private fun httpGet(url: String): String {
         // 每次刷新强制拉最新数据：加时间戳破坏缓存 + 关闭HTTP缓存 + no-cache头
         val sep = if (url.contains("?")) "&" else "?"

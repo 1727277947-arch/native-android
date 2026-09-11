@@ -25,6 +25,7 @@ import org.json.JSONObject
 class PricesFragment : Fragment() {
     private lateinit var container: LinearLayout
     private lateinit var refresher: SwipeRefreshLayout
+    private var healing = false
     @Volatile private var loading = false
 
     class GuideRow(val name: String, val direct: Int, val label: String, val strength: Int, val reason: String,
@@ -181,6 +182,7 @@ class PricesFragment : Fragment() {
                     try {
                         render(items, upd, guides, predictions, hfPicks, mor, aft)
                         finishRefresh(true, live, priceTotal, upd)
+                        if (live) autoHealIfStale(upd)
                     } catch (e: Exception) {
                         // 渲染异常兜底：不让行情页把整个App搞崩，给出可读提示
                         renderError(e.message ?: "render failed")
@@ -193,6 +195,58 @@ class PricesFragment : Fragment() {
         }.start()
     }
 
+    /**
+     * 数据陈旧自愈。
+     *
+     * GHA 的 schedule 在整点高峰常延迟十几到几十分钟，还会整档丢掉（实测今天 03:30 / 11:40 /
+     * 12:00 / 12:30 / 20:00 / 20:30 这些打板关键档都没跑）。结果是云端数据一直停在几小时前，
+     * App 却"正常"显示 —— 用户看到的就是"数据连不上 / 给我旧数据"。
+     *
+     * 这里在加载完成后检查 updated_at：超过阈值就自动触发一次云端抓取并重载，
+     * 同一段陈旧期内只自动触发一次，避免反复打网络。手动下拉刷新不受此限制。
+     */
+    private fun autoHealIfStale(updated: String) {
+        try {
+            if (updated.isBlank()) return
+            val ts = parseTs(updated) ?: return
+            val ageMin = (System.currentTimeMillis() - ts) / 60000L
+            // 盘中(08:00-23:00)数据超过 45 分钟即视为陈旧；其余时段放宽到 3 小时
+            val cal = java.util.Calendar.getInstance()
+            val hr = cal.get(java.util.Calendar.HOUR_OF_DAY)
+            val threshold = if (hr in 8..22) 45L else 180L
+            if (ageMin < threshold) return
+            if (healing) return
+            val sp = requireContext().getSharedPreferences("newsradar_prefs", android.content.Context.MODE_PRIVATE)
+            val lastTry = sp.getLong("autoheal_at", 0L)
+            if (System.currentTimeMillis() - lastTry < 10 * 60 * 1000L) return
+            sp.edit().putLong("autoheal_at", System.currentTimeMillis()).apply()
+            healing = true
+            RefreshLog.add(requireContext(), "数据已陈旧 " + ageMin + " 分钟，自动触发云端抓取")
+            Thread {
+                try {
+                    val r = CloudFetch.triggerAndWait()
+                    RefreshLog.add(requireContext(), "自动补抓：" + r.message)
+                } catch (e: Exception) {
+                    RefreshLog.add(requireContext(), "自动补抓失败：" + (e.message ?: ""))
+                } finally {
+                    healing = false
+                    onMain { try { load() } catch (_: Exception) {} }
+                }
+            }.start()
+        } catch (e: Exception) {
+            healing = false
+        }
+    }
+
+    /** 解析 updated_at（形如 2026-09-11T14:06:04，北京时间，无时区后缀）为毫秒。 */
+    private fun parseTs(s: String): Long? {
+        return try {
+            val clean = s.trim().replace("Z", "")
+            val fmt = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.US)
+            fmt.timeZone = java.util.TimeZone.getTimeZone("Asia/Shanghai")
+            fmt.parse(clean)?.time
+        } catch (e: Exception) { null }
+    }
     private fun onMain(run: () -> Unit) {
         if (isAdded && activity != null) activity!!.runOnUiThread(run)
     }
