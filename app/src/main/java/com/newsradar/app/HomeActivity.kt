@@ -28,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
 
         requestNotificationPermission()
         scheduleSync()
+        ensureBatteryExempt()
 
         // 从推送通知进入时，直接打开对应文章
         val pushUrl = intent?.getStringExtra("url")
@@ -86,6 +87,7 @@ class HomeActivity : AppCompatActivity() {
         // 使得即便当天主推在到点那次未成功，+30min 也会自动补推。(呈底重复驱动由 SyncWorker 内容规待重推控制)
         backstopDailyPicks()
         PushAlarm.scheduleAll(this)
+        ensureBatteryExempt()
     }
 
     /** 为未来今日的每个主推时段置执行 +30min OneTime 兑底 */
@@ -107,6 +109,27 @@ class HomeActivity : AppCompatActivity() {
             val d0 = (md - nowMin).toLong()
             val wake = OneTimeWorkRequestBuilder<SyncWorker>().setInitialDelay(d0, TimeUnit.MINUTES).build()
             WorkManager.getInstance(this).enqueueUniqueWork("aft_noon", ExistingWorkPolicy.REPLACE, wake)
+        }
+    }
+
+    /**
+     * vivo / OPPO / 小米等厂商的省电策略会把 AlarmManager 闹钟冻结（dumpsys alarm 里显示 Reason=frozen），
+     * 表现就是闹钟挂着却不响、午后板不推送。这里在启动时弹一次系统授权，让用户把 App 加入
+     * 电池优化白名单；只有用户点过"允许"，闹钟才真正能到点触发。用 SharedPreferences 只提示一次，
+     * 后续若仍未加白名单，则每次冷启动都再提醒一次，直到真正生效为止。
+     */
+    private fun ensureBatteryExempt() {
+        try {
+            if (PushAlarm.isBatteryExempt(this)) return
+            val sp = getSharedPreferences("newsradar_prefs", MODE_PRIVATE)
+            val last = sp.getLong("battery_prompt_at", 0L)
+            val nowMs = System.currentTimeMillis()
+            // 已提示过且在 12 小时内，不重复弹（避免每次回前台都打扰）
+            if (nowMs - last < 12 * 60 * 60 * 1000L) return
+            sp.edit().putLong("battery_prompt_at", nowMs).apply()
+            PushAlarm.requestBatteryExempt(this)
+        } catch (e: Exception) {
+            // 静默：拿不到就等用户手动在系统设置里开
         }
     }
 

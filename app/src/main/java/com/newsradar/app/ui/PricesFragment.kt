@@ -557,7 +557,9 @@ class PricesFragment : Fragment() {
             val name = o.optString("name", "")
             val sy = o.optString("symbol", "")
             val head2 = TextView(requireContext())
-            head2.text = "■ " + tag + "  " + name + "(" + sy + ")"
+            val pb = o.optString("plan_basis", "")
+            val pbTxt = if (pb == "afternoon_last") "  · 按午后现价重算" else if (pb == "alt_symbol") "  · 换标的机会" else ""
+            head2.text = "■ " + tag + "  " + name + "(" + sy + ")" + pbTxt
             head2.setTextColor(0xFF35293d.toInt()); head2.textSize = 14f; head2.setTypeface(null, Typeface.BOLD)
             head2.setPadding(0, dp(4), 0, 0)
             card.addView(head2)
